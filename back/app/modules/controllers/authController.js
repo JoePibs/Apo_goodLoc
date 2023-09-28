@@ -1,8 +1,5 @@
 import { AuthService } from '../services/authService.js';
-import {
-  statusCodes,
-  TOKEN_EXPIRY_TIME,
-} from '../../utils/core/genericConstants.js';
+import {statusCodes,TOKEN_EXPIRY_TIME} from '../../utils/core/genericConstants.js';
 import { sendError, sendResponse } from '../../utils/utils/httpUtils.js';
 import { generateToken } from '../../utils/utils/jwtUtils.js';
 import { EmailService } from '../services/emailService.js';
