@@ -27,7 +27,7 @@ jobs:
         working-directory: ./front
       - name: List contents of dist directory
         run: ls -R ./front/dist
-      - name: Deploy
+      - name: Deploy Frontend
         uses: reggionick/s3-deploy@v4
         with:
           folder: ./front/dist
@@ -37,3 +37,10 @@ jobs:
           no-cache: true
           private: true
           files-to-include: '**/*'
+      - name: Deploy Backend
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ec2-16-170-231-160.eu-north-1.compute.amazonaws.com
+          key: ${{ secrets.SSH_KEY_EC2 }}
+          username: ec2-user
+          script: sh deploy.sh
