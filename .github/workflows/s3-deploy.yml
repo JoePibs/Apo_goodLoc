@@ -21,7 +21,7 @@ jobs:
           node-version: 18
       - run: yarn
         working-directory: ./front
-      - run: yarn generate
+      - run: yarn generate-prod
         working-directory: ./front 
       - name: Deploy
         uses: reggionick/s3-deploy@v4
