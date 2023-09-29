@@ -15,33 +15,23 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       BROWSER_BASE_URL: http://ec2-16-170-231-160.eu-north-1.compute.amazonaws.com:8080/ 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 18 # Utilisez la version de Node.js correcte
-
-      - name: Install dependencies
-        run: |
-          cd front
-          yarn install
-          yarn generate
-
-      - name: List contents of dist directory (before deploy)
-        run: ls -R front/dist
-
+          node-version: 18
+      - run: yarn
+        working-directory: ./front
+      - run: yarn generate
+        working-directory: ./front
+      - name: List contents of dist directory
+        run: ls -R ./front/dist
       - name: Deploy
         uses: reggionick/s3-deploy@v4
         with:
-          folder: front/dist # Chemin relatif au répertoire de travail actuel
+          folder: ./front/dist
           bucket: goodloc
           bucket-region: eu-north-1
           delete-removed: true
           no-cache: true
           private: true
-          files-to-include: '.*/*,*/*,**'
-
-      - name: List contents of dist directory (after deploy)
-        run: ls -R front/dist
+          files-to-include: '**/*'
