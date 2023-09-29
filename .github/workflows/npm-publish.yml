@@ -13,6 +13,7 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      BROWSER_BASE_URL: http://ec2-16-170-231-160.eu-north-1.compute.amazonaws.com:8080/ 
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -20,12 +21,12 @@ jobs:
           node-version: 18
       - run: yarn
         working-directory: ./front
-      - run: yarn generate-prod
+      - run: yarn generate
         working-directory: ./front 
       - name: Deploy
         uses: reggionick/s3-deploy@v4
         with:
-          folder: ./front/dist
+          folder: dist
           bucket: goodloc
           bucket-region: eu-north-1
           delete-removed: true
