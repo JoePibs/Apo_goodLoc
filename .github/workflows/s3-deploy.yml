@@ -18,6 +18,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - run: yarn
+        working-directory: ./front
       - run: yarn generate-prod
         working-directory: ./front
       - name: List contents of dist directory
