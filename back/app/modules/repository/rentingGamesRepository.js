@@ -288,7 +288,7 @@ export class RentingGamesRepository {
           where: {
             [Op.or]: [
               { status: { [Op.notIn]: ['reserved', 'rented'] } },
-              { status: { [Op.is]: ['closed'] } },
+              { status: { [Op.in]: ['closed'] } },
               { id: { [Op.is]: null } }, // This will match rentingOrBuyingGames with no associated rents
             ],
           },
