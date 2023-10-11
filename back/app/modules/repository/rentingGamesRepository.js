@@ -46,7 +46,7 @@ export class RentingGamesRepository {
     const priceDayRenting = parseFloat(gameInfo.priceDayRenting);
 
     if (isNaN(priceDayRenting) || Number.isInteger(priceDayRenting)) {
-      throw new Error('Le prix par jour doit être un nombre décimal.');
+      throw new Error('Le prix par jour ne doit pas contenir une virgule mais un point .');
     }
 
     await this.rentingOrBuyingGames.create({
@@ -287,8 +287,8 @@ export class RentingGamesRepository {
           as: 'Rents',
           where: {
             [Op.or]: [
-              { status: { [Op.notIn]: ['reserved', 'rented'] } },
-              { id: { [Op.is]: null } }, // This will match rentingOrBuyingGames with no associated rents
+              { status: { [Op.is]: ['closed'] } },
+              { id: { [Op.is]: null } },
             ],
           },
           required: false,
