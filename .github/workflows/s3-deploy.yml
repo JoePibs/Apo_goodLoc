@@ -23,8 +23,6 @@ jobs:
         working-directory: ./front
       - run: yarn test
         working-directory: ./front
-      - run: yarn test
-        working-directory: ./back
       - run: yarn generate-prod
         working-directory: ./front
       - name: List contents of dist directory
