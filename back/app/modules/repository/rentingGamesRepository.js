@@ -43,6 +43,11 @@ export class RentingGamesRepository {
     const existingRentingGame = await this.findGame(game.id, gameInfo.ownerId);
     if (existingRentingGame)
       throw new Error('Le jeu spécifié est déjà en location ou à la vente');
+    const priceDayRenting = parseFloat(gameInfo.priceDayRenting);
+
+    if (isNaN(priceDayRenting) || Number.isInteger(priceDayRenting)) {
+      throw new Error('Le prix par jour doit être un nombre décimal.');
+    }
 
     await this.rentingOrBuyingGames.create({
       game_id: game.id,
@@ -118,7 +123,7 @@ export class RentingGamesRepository {
           model: this.users,
           as: 'owner',
           where: {
-            ...(userId ? { id: { [Op.ne]: `${userId}` } } : {}),
+            ...(userId ? { owner_id: { [Op.not]: `${userId}` } } : {}),
             ...(city ? { city: { [Op.like]: `%${city}%` } } : {}),
           },
           attributes: { exclude: ['password'] },
