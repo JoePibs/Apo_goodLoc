@@ -5,8 +5,8 @@
         <v-icon>mdi-close</v-icon>
       </v-btn>
       <v-container class="login_container">
-        <v-card-title class="justify-center">
-          Already an Unicorn 🦄 Gamer ?</v-card-title
+        <v-card-title class="justify-center" >
+          Already an 🦄 Gamer ?</v-card-title
         >
         <v-btn
           class="button_login"
@@ -27,7 +27,7 @@
       <v-container class="login_container">
         <v-card id="cardInscription">
           <v-card-title class="justify-center">
-            Become a Unicorn 🌈</v-card-title
+            Become a Unicorn </v-card-title
           >
           <div id="rowForm">
             <v-divider></v-divider>
@@ -184,6 +184,7 @@ export default {
   border-radius: 5px 5px 5px 5px !important;
   text-align: center;
   margin-bottom: 20px;
+  white-space: nowrap;
   .button_row {
     max-width: 100%;
     display: flex;
