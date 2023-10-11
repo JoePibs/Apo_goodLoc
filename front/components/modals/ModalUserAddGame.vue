@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="showAddGameModal" persistent onsubmit="return">
+    <v-dialog v-model="showAddGameModal" persistent>
       <v-card>
         <v-btn icon class="close-button" @click="closeModal">
           <v-icon>mdi-close</v-icon>
@@ -24,6 +24,7 @@
     </v-dialog>
   </div>
 </template>
+
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
@@ -67,11 +68,17 @@ export default {
       })
     },
     async addGameRent() {
+      const pricePerDayFloat = parseFloat(this.pricePerDay);
+      if (isNaN(pricePerDayFloat)) {
+        this.$awn.alert('Price is not valid.');
+        return
+      }
+
       await this.$axios
         .$post('/api/rentingGames/add', {
           id: this.game.id,
           ownerId: this.$auth.$storage.getUniversal('user').id,
-          priceDayRenting: this.pricePerDay,
+          priceDayRenting: pricePerDayFloat, 
           discountMoreDayRenting: 0,
           discountWeekRenting: 0,
           priceBuying: 0,
@@ -79,13 +86,13 @@ export default {
         })
         .then(
           async (response) => {
-            this.$awn.success('game added')
-            await this.$parent.getUserRentingGames()
-            this.setShowAddGameModal(false)
+            this.$awn.success('Jeu ajouté');
+            await this.$parent.getUserRentingGames();
+            this.setShowAddGameModal(false);
           },
           (error) => {
-            this.$awn.alert(error.response.data.error)
-            this.setShowAddGameModal(false)
+            this.$awn.alert(error.response.data.error);
+            this.setShowAddGameModal(false);
           }
         )
     },
