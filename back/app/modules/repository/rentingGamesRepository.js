@@ -123,7 +123,7 @@ export class RentingGamesRepository {
           model: this.users,
           as: 'owner',
           where: {
-            ...(userId ? { owner_id: { [Op.not]: `${userId}` } } : {}),
+            ...(userId ? { id: { [Op.not]: `${userId}` } } : {}),
             ...(city ? { city: { [Op.like]: `%${city}%` } } : {}),
           },
           attributes: { exclude: ['password'] },
