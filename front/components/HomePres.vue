@@ -29,7 +29,7 @@ export default {
           title: 'RENT',
           img: '001.png',
           text: 'Rent a game or more to play with your friends.',
-          text2: 'Test the game before buying it. And enjoy🦄 !!',
+          text2: 'Test the game before buying it. And enjoy !!',
           textBtn: 'RENT',
           open: true,
           to: '/game-list',
