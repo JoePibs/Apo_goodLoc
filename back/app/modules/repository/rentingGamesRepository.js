@@ -283,19 +283,43 @@ export class RentingGamesRepository {
           },
         },
         {
-          model: models.rents,
+          model: this.rents,
           as: 'Rents',
           where: {
             [Op.or]: [
               { status: { [Op.notIn]: ['reserved', 'rented'] } },
-              { status: { [Op.in]: ['closed'] } },
-              { id: { [Op.is]: null } }, // This will match rentingOrBuyingGames with no associated rents
+              { id: { [Op.is]: null } },
             ],
           },
           required: false,
         },
       ],
     });
+    rentingGames = rentingGames.filter((rentGame) => {
+      return !rentGame.Rents.some(
+        (rent) => rent.status === 'reserved' || rent.status === 'rented'
+      );
+    });
+
+    rentingGames = await Promise.all(
+      rentingGames.map(async (gameResponse) => {
+        const rent = await this.rents.findOne({
+          where: {
+            user_game_id: gameResponse.id,
+            status: { [Op.or]: ['reserved', 'rented'] },
+          },
+        });
+
+        if (rent) {
+          return null;
+        }
+
+        return gameResponse;
+      })
+    );
+
+    rentingGames = rentingGames.filter((gameResponse) => gameResponse !== null);
+
     return processGameObjects(rentingGames);
   }
 }
