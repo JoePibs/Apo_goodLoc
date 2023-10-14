@@ -1,5 +1,8 @@
 import { AuthService } from '../services/authService.js';
-import {statusCodes,TOKEN_EXPIRY_TIME} from '../../utils/core/genericConstants.js';
+import {
+  statusCodes,
+  TOKEN_EXPIRY_TIME,
+} from '../../utils/core/genericConstants.js';
 import { sendError, sendResponse } from '../../utils/utils/httpUtils.js';
 import { generateToken } from '../../utils/utils/jwtUtils.js';
 import { EmailService } from '../services/emailService.js';
@@ -24,9 +27,11 @@ export class AuthController {
 
   static login = async (req, res) => {
     try {
+      // @ts-ignore
       const user = await AuthService.loginUser(req.body, req.models);
 
       let token = generateToken(
+        // @ts-ignore
         { id: user.id, pseudo: user.pseudo },
         TOKEN_EXPIRY_TIME
       );
@@ -51,12 +56,13 @@ export class AuthController {
 
   static logout = async (req, res) => {
     try {
+      // @ts-ignore
       const user = await AuthService.logoutUser(req.userId, req.models);
 
       sendResponse(
         res,
         statusCodes.STATUS_OK,
-        `l'utilisateur avec l'id ${user.id} a été deconnecté`
+        `User with id ${user.id} has been logged out.`
       );
     } catch (err) {
       console.log(err);
@@ -64,7 +70,7 @@ export class AuthController {
       sendError(
         res,
         statusCodes.STATUS_INTERNAL_SERVER_ERROR,
-        'Une erreur est survenue lors de la déconnexion'
+        'Something went wrong while logging out.'
       );
     }
   };
@@ -73,9 +79,10 @@ export class AuthController {
     try {
       const { user, token } = await AuthService.processForgotPassword(
         req.body.email,
+        // @ts-ignore
         req.models
       );
-
+      // @ts-ignore
       const { error } = await EmailService.sendPasswordResetEmail(
         user,
         token,
