@@ -11,7 +11,6 @@ function processGameObjects(data) {
         ? game.mechanics_type.name
         : 'n/a';
 
-      // Optional: delete original objects if not needed
       delete game.category;
       delete game.publisher;
       delete game.mechanics_type;
@@ -42,11 +41,15 @@ export class RentingGamesRepository {
 
     const existingRentingGame = await this.findGame(game.id, gameInfo.ownerId);
     if (existingRentingGame)
-      throw new Error('Le jeu spécifié est déjà en location ou à la vente');
+      throw new Error(
+        'The specified set is already available for hire or sale'
+      );
     const priceDayRenting = parseFloat(gameInfo.priceDayRenting);
 
     if (isNaN(priceDayRenting) || Number.isInteger(priceDayRenting)) {
-      throw new Error('Le prix par jour ne doit pas contenir une virgule mais un point .');
+      throw new Error(
+        'The price per day must not contain a comma but a full stop.'
+      );
     }
 
     await this.rentingOrBuyingGames.create({
@@ -59,7 +62,7 @@ export class RentingGamesRepository {
       caution_price: gameInfo.cautionPrice,
     });
 
-    return 'La location a été ajoutée avec succès';
+    return 'Rental successfully added';
   }
 
   static async getRentingGamesByUser({ userId, limit, offset }) {
